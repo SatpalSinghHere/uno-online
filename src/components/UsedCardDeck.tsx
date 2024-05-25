@@ -1,25 +1,35 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import red1 from "../cards/red 1.png"
-import blue1 from "../cards/blue 1.png"
-import green1 from "../cards/green 1.png"
-import yellow1 from "../cards/yellow 1.png"
-import plus4 from "../cards/+4.png"
-import bluePlus2 from "../cards/blue +2.png"
-import UsedCard from './UsedCard'
-import { StaticImageData } from 'next/image'
+
+import Card from './Card'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/globalRedux/store'
 
 const UsedCardDeck = () => {
-    const [UsedCardDeskList, setUsedCardDeckList] = useState([red1, blue1, bluePlus2])
+    // const [usedCardDeskList, setUsedCardDeckList] = useState([red1, blue1, bluePlus2])
 
-    const addUsedCardHandler = (card:StaticImageData) => {
-        setUsedCardDeckList(prevState => [...prevState, card])
-    }
+    // const addUsedCardHandler = (card:StaticImageData) => {
+    //     setUsedCardDeckList(prevState => [...prevState, card])
+    // }
+
+    const usedCardList = useSelector((state: RootState) => state.usedCards.list)
+    // const cardOnTop = usedCardList[-1]
+    
 
     return (
-        <div className='absolute top-10 flex justify-center w-2/3 h-52'>
-            {UsedCardDeskList .map((item, index) => 
-                <UsedCard classValue={'h-full relative'} index={index} image={item.src} key={index} />
+        <div className='relative top-10 flex justify-center w-2/3 h-52'>
+            {usedCardList .map((item, index) => 
+                <Card 
+                cardOnTop={usedCardList.at(-1)}
+                // cardName={Object.keys(item)[0]}
+                cardObject={item}
+                isUsed={true}
+                canBeUsed={false}
+                removeCardHandler={null}
+                classValue={'h-full absolute'} 
+                index={index}
+                midIndex={0} 
+                key={index} />
             )}
         </div>
     )

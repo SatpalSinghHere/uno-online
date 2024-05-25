@@ -3,54 +3,98 @@
 import React, { useEffect, useState } from 'react'
 import { motion, useAnimate } from 'framer-motion'
 import { StaticImageData } from 'next/image'
+import { useDispatch } from 'react-redux'
+import { addUsedCard } from '@/app/globalRedux/features/usedCards/usedCardSlice'
+import { card } from '@/utils/cardObjects'
 
 
-const Card = ({setCardList, cardList, classValue, image, index, midIndex }: {setCardList: Function, cardList: Array<StaticImageData>, classValue: string, image: StaticImageData, index: number, midIndex: number }) => {
+const Card = ({ 
+    cardOnTop,
+    removeCardHandler,
+    // cardName, 
+    isUsed,
+    canBeUsed, 
+    classValue, 
+    cardObject, 
+    index, 
+    midIndex,
+    changeFactor }:
+    { 
+        cardOnTop: card,
+        removeCardHandler: Function,
+        // cardName: string, 
+        isUsed: boolean, 
+        canBeUsed: boolean, 
+        classValue: string, 
+        cardObject: card , 
+        index: number, 
+        midIndex: number,
+        changeFactor: number, 
+    }) => {
 
-    // const [cardUsed, setCardUsed] = useState(false)
+    // const addUsedCardHandler = (image: StaticImageData) => {
+    //     setDeckValue((prev: Array<StaticImageData>) => [...prev, image])
+    // }
 
-    // const [scope, animate] = useAnimate()
-    // useEffect(() => {
-    //     if (cardUsed == true) {
-    //         animate(scope.current, {
-    //             y: "-50vh"
-    //         })
-    //     }
-    // }, [cardUsed])
+    // const removeCardHandler = (cardObject: card) => {
+    //     const newDeckValue = deckValue.filter((item) => {
+    //         return item !== cardObject
+    //     })
+    //     setDeckValue(newDeckValue)
+    //     console.log(cardObject, newDeckValue);
+    // }
 
-    const removeCardHandler = (card:StaticImageData) => {
-        const newCardList = cardList.filter((item)=> {
-            return item !== card
-        })
-        setCardList(newCardList)
-        console.log(card, newCardList);
-    }
+    // const [canBeUsed, setCanBeUsed] = useState(false)
+
+    // // if (canBeUsed == false && (cardOnTop.value == cardObject.value || cardOnTop.color == cardObject.color)){
+    // //     setCanBeUsed(true)
+    // // }
+
+    const dispatch = useDispatch();
 
     const useCard = () => {
-        removeCardHandler(image)
+        removeCardHandler(cardObject)
+        dispatch(addUsedCard(cardObject))
     }
-
+    // console.log(cardObject)
     return (
 
         <motion.img
-            
-            // ref={scope}
+            layoutId={cardObject.image.src}
+            layout="position"
             className={classValue}
-            src={image.src} alt="card"
-            key={index}
-            initial={{
-                // x: (index - midIndex) * 50,
-            }}
-            whileHover={{
-                scale: 1.1,
-                y: -50,
-                zIndex: 100,
-            }}
-
+            src={cardObject.image.src} alt="card"
+            key={changeFactor}
+            initial={
+                isUsed ? {
+                    rotate: (Math.random() - 0.5)*100 
+                }:{
+                    ...canBeUsed ? {
+                        x: (index - midIndex) * 50,
+                        y: -20
+                    }:{
+                        x: (index - midIndex) * 50,
+                    }
+                        // x: (index - midIndex) * 30,
+                        // y: Math.abs(index - midIndex) * 5,
+                        // rotate: (index - midIndex) * 4,
+                    
+                }
+            }
+            whileHover={
+                isUsed ? {} : {
+                    scale: 1.1,
+                    y: -50,
+                    zIndex: 100,
+                }
+            }
             transition={{
-                delay: 0.1
+                delay: 0.1,
+                
             }}
-            onClick={()=>{useCard()}}
+            onClick={() => {
+                if (!isUsed && canBeUsed) { useCard() }
+            }}
         />
 
     )
