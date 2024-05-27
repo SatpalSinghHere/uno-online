@@ -29,7 +29,9 @@ const UsedCardDeck = () => {
                 classValue={'h-full absolute'} 
                 index={index}
                 midIndex={0} 
-                key={index} />
+                key={index} 
+                changeFactor={null}
+                />
             )}
         </div>
     )

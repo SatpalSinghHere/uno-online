@@ -8,28 +8,28 @@ import { addUsedCard } from '@/app/globalRedux/features/usedCards/usedCardSlice'
 import { card } from '@/utils/cardObjects'
 
 
-const Card = ({ 
+const Card = ({
     cardOnTop,
     removeCardHandler,
     // cardName, 
     isUsed,
-    canBeUsed, 
-    classValue, 
-    cardObject, 
-    index, 
+    canBeUsed,
+    classValue,
+    cardObject,
+    index,
     midIndex,
     changeFactor }:
-    { 
+    {
         cardOnTop: card,
         removeCardHandler: Function,
         // cardName: string, 
-        isUsed: boolean, 
-        canBeUsed: boolean, 
-        classValue: string, 
-        cardObject: card , 
-        index: number, 
+        isUsed: boolean,
+        canBeUsed: boolean,
+        classValue: string,
+        cardObject: card,
+        index: number,
         midIndex: number,
-        changeFactor: number, 
+        changeFactor: number,
     }) => {
 
     // const addUsedCardHandler = (image: StaticImageData) => {
@@ -67,30 +67,38 @@ const Card = ({
             key={changeFactor}
             initial={
                 isUsed ? {
-                    rotate: (Math.random() - 0.5)*100 
-                }:{
+                    rotate: (Math.random() - 0.5) * 100
+                } : {
                     ...canBeUsed ? {
-                        x: (index - midIndex) * 50,
-                        y: -20
-                    }:{
-                        x: (index - midIndex) * 50,
+                        x: (index - midIndex) * 30,
+                        y: (Math.abs(index - midIndex) * 5) - 20,
+                        rotate: (index - midIndex) * 4,
+                        // boxShadow: "0px -5px 2px white"
+                    } : {
+                        x: (index - midIndex) * 30,
+                        y: Math.abs(index - midIndex) * 5,
+                        rotate: (index - midIndex) * 4,
                     }
-                        // x: (index - midIndex) * 30,
-                        // y: Math.abs(index - midIndex) * 5,
-                        // rotate: (index - midIndex) * 4,
-                    
+                    // x: (index - midIndex) * 30,
+                    // y: Math.abs(index - midIndex) * 5,
+                    // rotate: (index - midIndex) * 4,
+
                 }
             }
             whileHover={
                 isUsed ? {} : {
-                    scale: 1.1,
-                    y: -50,
-                    zIndex: 100,
+                    ...canBeUsed ? {
+                        // scale: 1.1,
+                        y: -50,
+                        zIndex: 100,
+                    }:
+                    {}
+                    
                 }
             }
             transition={{
-                delay: 0.1,
-                
+                // delay: 0.1,
+
             }}
             onClick={() => {
                 if (!isUsed && canBeUsed) { useCard() }
